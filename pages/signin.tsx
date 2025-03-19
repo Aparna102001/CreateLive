@@ -30,8 +30,8 @@ const SignIn = ({ setIsLoggedIn, toggleAuthMode }: { setIsLoggedIn: React.Dispat
       {/* Navbar */}
       <nav style={styles.navbar}>
         <div style={styles.navContent}>
-          <img src="/logo.png" alt="CreativeLive Logo" style={styles.logo} />
-          <h1 style={styles.navTitle}>CreativeLive</h1>
+          <img src="/assets/logo.svg" alt="CreativeLive Logo" style={styles.logo} />
+          
         </div>
       </nav>
 
@@ -109,8 +109,8 @@ const styles = {
     alignItems: "center",
   },
   logo: {
-    width: "40px",
-    height: "40px",
+    width: "250px",
+    height: "80px",
     marginRight: "10px",
   },
   navTitle: {

@@ -31,7 +31,7 @@ const SignUp = ({ setIsLoggedIn, toggleAuthMode }: { setIsLoggedIn: React.Dispat
       {/* Navbar */}
       <nav style={styles.navbar}>
         <div style={styles.navContent}>
-          <img src="public/assets/logo.svg" alt="CreativeLive Logo" style={styles.logo} />
+          <img src="/assets/logo.svg" alt="CreativeLive Logo" style={styles.logo} />
           
         </div>
       </nav>
@@ -110,8 +110,8 @@ const styles = {
     alignItems: "center",
   },
   logo: {
-    width: "40px",
-    height: "40px",
+    width: "250px",
+    height: "80px",
     marginRight: "10px",
   },
   navTitle: {
@@ -195,7 +195,7 @@ const styles = {
     transition: "color 0.3s ease", // Smooth color transition for toggle text
   },
   toggleButton: {
-    color: "#6f42c1", // Purple color for Sign In link
+    color: "#6f42c1", // Purple color for Sign Up link
     textDecoration: "underline",
     background: "none",
     border: "none",
@@ -205,3 +205,4 @@ const styles = {
 };
 
 export default SignUp;
+

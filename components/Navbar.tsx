@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { memo } from "react";
+import { useRouter } from "next/navigation";
 
 import { navElements } from "@/constants";
 import { ActiveElement, NavbarProps } from "@/types/type";
@@ -12,14 +13,23 @@ import ActiveUsers from "./users/ActiveUsers";
 import { NewThread } from "./comments/NewThread";
 
 const Navbar = ({ activeElement, imageInputRef, handleImageUpload, handleActiveElement }: NavbarProps) => {
+  const router = useRouter();
+
   const isActive = (value: string | Array<ActiveElement>) =>
     (activeElement && activeElement.value === value) ||
     (Array.isArray(value) && value.some((val) => val?.value === activeElement?.value));
 
-  return (
-    <nav className="flex select-none items-center justify-between gap-4 bg-primary-black px-5 text-white">
-      <Image src="/assets/logo.svg" alt="FigPro Logo" width={58} height={20} />
+  const handleLogout = () => {
+    // Perform any logout logic here (e.g., clear tokens, reset state)
+    router.push("/signin"); // Redirect to sign-in page
+  };
 
+  return (
+    <nav className="flex select-none items-center justify-between gap-4 bg-primary-black px-5 py-3 text-white">
+      {/* Logo */}
+      <Image src="/assets/logo.svg" alt="createlive Logo" width={100} height={50} />
+
+      {/* Navigation Menu */}
       <ul className="flex flex-row">
         {navElements.map((item: ActiveElement | any) => (
           <li
@@ -42,7 +52,6 @@ const Navbar = ({ activeElement, imageInputRef, handleImageUpload, handleActiveE
                 handleImageUpload={handleImageUpload}
               />
             ) : item?.value === "comments" ? (
-              // If value is comments, trigger the NewThread component
               <NewThread>
                 <Button className="relative w-5 h-5 object-contain">
                   <Image
@@ -67,9 +76,16 @@ const Navbar = ({ activeElement, imageInputRef, handleImageUpload, handleActiveE
         ))}
       </ul>
 
-      <ActiveUsers />
+      {/* Logout Button */}
+      <div className="flex items-center gap-4">
+        <ActiveUsers />
+        <Button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md">
+          Logout
+        </Button>
+      </div>
     </nav>
   );
 };
 
 export default memo(Navbar, (prevProps, nextProps) => prevProps.activeElement === nextProps.activeElement);
+
