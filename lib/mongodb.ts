@@ -1,15 +1,17 @@
-import { MongoClient } from "mongodb";
+import clientPromise from "@/lib/mongodb";
 
-const uri = process.env.MONGODB_URI || "";
-const options = { serverSelectionTimeoutMS: 5000 }; // 5 seconds timeout
+async function testMongo() {
+  try {
+    console.log("Connecting to MongoDB...");
+    const client = await clientPromise;
+    const db = client.db("createlive");
+    console.log("Connected to MongoDB ✅");
 
-let client;
-let clientPromise: Promise<MongoClient>;
-
-if (!global._mongoClientPromise) {
-  client = new MongoClient(uri, options);
-  global._mongoClientPromise = client.connect();
+    const collections = await db.listCollections().toArray();
+    console.log("Collections:", collections);
+  } catch (error) {
+    console.error("MongoDB Connection Error:", error);
+  }
 }
 
-clientPromise = global._mongoClientPromise;
-export default clientPromise;
+testMongo();
