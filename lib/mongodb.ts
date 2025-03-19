@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/createlive";
+const uri = process.env.MONGODB_URI || "mongodb+srv://createlive:<db_password>@cluster0.oftou.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 async function testMongo() {
   try {
