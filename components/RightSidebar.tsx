@@ -33,7 +33,7 @@ const RightSidebar = ({
         syncShapeInStorage,
       });
     },
-    [setElementAttributes, fabricRef, activeObjectRef, syncShapeInStorage]
+    [setElementAttributes, fabricRef, activeObjectRef, syncShapeInStorage,isEditingRef]
   );
 
   // ✅ Now memoizedContent won't re-render unnecessarily

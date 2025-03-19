@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from 'next/image';
 
 const SignIn = ({ setIsLoggedIn, toggleAuthMode }: { setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>; toggleAuthMode: () => void }) => {
   const [email, setEmail] = useState<string>("");
@@ -30,8 +31,7 @@ const SignIn = ({ setIsLoggedIn, toggleAuthMode }: { setIsLoggedIn: React.Dispat
       {/* Navbar */}
       <nav style={styles.navbar}>
         <div style={styles.navContent}>
-          <img src="/assets/logo.svg" alt="CreativeLive Logo" style={styles.logo} />
-          
+         <Image src="/assets/logo.svg" alt="createlive Logo" width={100} height={50} />
         </div>
       </nav>
 
@@ -66,7 +66,9 @@ const SignIn = ({ setIsLoggedIn, toggleAuthMode }: { setIsLoggedIn: React.Dispat
           {message && <p style={styles.message}>{message}</p>}
 
           <p style={styles.toggleText}>
-            Don't have an account?{" "}
+  {"Don’t have an account?"}{" "}
+
+
             <button
               onClick={toggleAuthMode}
               style={styles.toggleButton}
