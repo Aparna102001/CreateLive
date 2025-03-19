@@ -250,14 +250,14 @@ export default function Home() {
       window.removeEventListener("resize", handleResizeEvent);
       window.removeEventListener("keydown", handleKeyDownEvent);
     };
-  }, [isLoggedIn]);
+  }, [isLoggedIn,deleteShapeFromStorage, redo, syncShapeInStorage, undo]);
 
   // Render the canvas when canvasObjects changes
   useEffect(() => {
     if (isLoggedIn) {
       setTimeout(() => renderCanvas({ fabricRef, canvasObjects, activeObjectRef }), 100);
     }
-  }, [isLoggedIn, canvasObjects]);
+  }, [isLoggedIn, canvasObjects,deleteShapeFromStorage, redo, syncShapeInStorage, undo]);
 
   
 
