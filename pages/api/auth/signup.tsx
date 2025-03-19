@@ -1,54 +1,53 @@
-import clientPromise from "@/lib/mongodb";
-import bcrypt from "bcryptjs";
-import { NextApiRequest, NextApiResponse } from "next";
+import { MongoClient } from "mongodb";
 
-export default async function handler(req, res) {
+const uri = process.env.MONGODB_URI;
+if (!uri) {
+  console.error("❌ MONGODB_URI is missing in environment variables!");
+}
+
+async function handler(req, res) {
+  console.log("🔹 Received request:", req.method);
+
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Only POST requests are allowed" });
+    return res.status(405).json({ error: "Method Not Allowed" });
   }
 
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({ message: "Email and password are required" });
-  }
-
+  let client;
   try {
-    console.log("🔄 Connecting to MongoDB for signup...");
-    const client = await clientPromise;
-    if (!client) {
-      console.error("❌ clientPromise resolved to undefined!");
-      return res.status(500).json({ message: "MongoDB connection failed" });
-    }
+    console.log("🔹 Connecting to MongoDB...");
+    client = new MongoClient(uri);
+    await client.connect();
+    console.log("✅ Connected to MongoDB");
 
-    console.log("✅ MongoDB Client obtained!");
     const db = client.db("createlive");
-    console.log("✅ Database selected:", db.databaseName);
+    if (!db) {
+      throw new Error("Database connection failed! `db` is undefined.");
+    }
 
-    const existingUser = await db.collection("users").findOne({ email });
+    // Get email and password from request body
+    const { email, password } = req.body;
+    if (!email || !password) {
+      throw new Error("Missing required fields: email or password.");
+    }
+
+    const usersCollection = db.collection("users");
+
+    // Check if email already exists
+    const existingUser = await usersCollection.findOne({ email });
     if (existingUser) {
-      console.log("❌ User already exists:", existingUser);
-      return res.status(400).json({ message: "User already exists" });
+      throw new Error("Email already registered.");
     }
 
-    console.log("🔄 Hashing password...");
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Insert new user
+    await usersCollection.insertOne({ email, password });
 
-    console.log("🔄 Inserting user into database...");
-    const result = await db.collection("users").insertOne({ email, password: hashedPassword });
-
-    console.log("✅ Insert Result:", result);
-
-    if (result.acknowledged) {
-      return res.status(201).json({ message: "User created successfully" });
-    } else {
-      console.error("❌ Insert failed");
-      return res.status(500).json({ message: "Error creating user" });
-    }
+    res.status(201).json({ message: "User created successfully" });
   } catch (error) {
-    console.error("❌ Signup API Error:", error);
-    return res.status(500).json({ message: `Internal server error: ${error.message}` });
+    console.error("❌ Signup Error:", error.message);
+    res.status(500).json({ error: error.message });
+  } finally {
+    if (client) await client.close();
   }
 }
 
-
+export default handler;

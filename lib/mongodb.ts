@@ -1,22 +1,20 @@
 import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URI || "mongodb+srv://createlive:<db_password>@cluster0.oftou.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = process.env.MONGODB_URI;
+if (!uri) throw new Error("⚠️ MONGODB_URI is missing in .env.local!");
 
-async function testMongo() {
-  try {
-    console.log("Connecting to MongoDB...");
-    const client = new MongoClient(uri);
-    await client.connect();
-    const db = client.db("createlive");
-    console.log("Connected to MongoDB ✅");
+let client;
+let clientPromise: Promise<MongoClient>;
 
-    const collections = await db.listCollections().toArray();
-    console.log("Collections:", collections);
-
-    await client.close();
-  } catch (error) {
-    console.error("MongoDB Connection Error:", error);
+if (process.env.NODE_ENV === "development") {
+  if (!global._mongoClientPromise) {
+    client = new MongoClient(uri);
+    global._mongoClientPromise = client.connect();
   }
+  clientPromise = global._mongoClientPromise;
+} else {
+  client = new MongoClient(uri);
+  clientPromise = client.connect();
 }
 
-testMongo();
+export default clientPromise;
