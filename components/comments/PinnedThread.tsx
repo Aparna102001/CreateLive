@@ -12,7 +12,7 @@ type Props = {
   onFocus: (threadId: string) => void;
 };
 
-export const PinnedThread = ({ thread, onFocus, ...props }: Props) => {
+export const ad = ({ thread, onFocus, ...props }: Props) => {
   // Open pinned threads that have just been created
   const startMinimized = useMemo(
     () => Number(new Date()) - Number(new Date(thread.createdAt)) > 100,
@@ -74,7 +74,7 @@ export const PinnedThread = ({ thread, onFocus, ...props }: Props) => {
         ) : null}
       </div>
     ),
-    [thread.comments.length, minimized]
+    [thread.comments.length, minimized,onFocus, props, thread]
   );
 
   return <>{memoizedContent}</>;
