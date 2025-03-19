@@ -110,8 +110,6 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     height: "100vh",
-    backgroundImage:
-      "linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)), url('/your-image-url.jpg')",
     backgroundSize: "cover",
     backgroundPosition: "center",
     justifyContent: "center",

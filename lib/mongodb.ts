@@ -1,25 +1,15 @@
 import { MongoClient } from "mongodb";
 
-const MONGODB_URI = process.env.MONGODB_URI; // Add this in .env.local
-const options = {};
+const uri = process.env.MONGODB_URI || "";
+const options = { serverSelectionTimeoutMS: 5000 }; // 5 seconds timeout
 
 let client;
-let clientPromise;
+let clientPromise: Promise<MongoClient>;
 
-if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable");
+if (!global._mongoClientPromise) {
+  client = new MongoClient(uri, options);
+  global._mongoClientPromise = client.connect();
 }
 
-if (process.env.NODE_ENV === "development") {
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(MONGODB_URI, options);
-    global._mongoClientPromise = client.connect();
-  }
-  clientPromise = global._mongoClientPromise;
-} else {
-  client = new MongoClient(MONGODB_URI, options);
-  clientPromise = client.connect();
-}
-
+clientPromise = global._mongoClientPromise;
 export default clientPromise;
-
