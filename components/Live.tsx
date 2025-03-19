@@ -24,6 +24,7 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
    * useOthers: https://liveblocks.io/docs/api-reference/liveblocks-react#useOthers
    */
   const others = useOthers();
+  
 
   /**
    * useMyPresence returns the presence of the current user in the room.
