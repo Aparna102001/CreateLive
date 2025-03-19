@@ -182,7 +182,7 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
         cursorState.mode === CursorMode.Reaction ? { ...state, isPressed: true } : state
       );
     },
-    [cursorState.mode, setCursorState]
+    [cursorState.mode, setCursorState,updateMyPresence]
   );
 
   // hide the cursor when the mouse is up

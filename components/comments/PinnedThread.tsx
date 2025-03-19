@@ -12,7 +12,7 @@ type Props = {
   onFocus: (threadId: string) => void;
 };
 
-export const ad = ({ thread, onFocus, ...props }: Props) => {
+export const Ad = ({ thread, onFocus }: Props) => {
   // Open pinned threads that have just been created
   const startMinimized = useMemo(
     () => Number(new Date()) - Number(new Date(thread.createdAt)) > 100,
@@ -22,21 +22,17 @@ export const ad = ({ thread, onFocus, ...props }: Props) => {
   const [minimized, setMinimized] = useState(startMinimized);
 
   /**
-   * memoize the result of this function so that it doesn't change on every render but only when the thread changes
-   * Memo is used to optimize performance and avoid unnecessary re-renders.
-   *
+   * Memoize the result of this function so that it doesn't change on every render but only when the thread changes.
    * useMemo: https://react.dev/reference/react/useMemo
    */
-
   const memoizedContent = useMemo(
     () => (
       <div
-        className='absolute flex cursor-pointer gap-4'
-        {...props}
+        className="absolute flex cursor-pointer gap-4"
         onClick={(e: any) => {
           onFocus(thread.id);
 
-          // check if click is on/in the composer
+          // Check if click is on/in the composer
           if (
             e.target &&
             e.target.classList.contains("lb-icon") &&
@@ -49,20 +45,20 @@ export const ad = ({ thread, onFocus, ...props }: Props) => {
         }}
       >
         <div
-          className='relative flex h-9 w-9 select-none items-center justify-center rounded-bl-full rounded-br-full rounded-tl-md rounded-tr-full bg-white shadow'
+          className="relative flex h-9 w-9 select-none items-center justify-center rounded-bl-full rounded-br-full rounded-tl-md rounded-tr-full bg-white shadow"
           data-draggable={true}
         >
           <Image
             src={`https://liveblocks.io/avatars/avatar-${Math.floor(Math.random() * 30)}.png`}
-            alt='Dummy Name'
+            alt="Dummy Name"
             width={28}
             height={28}
             draggable={false}
-            className='rounded-full'
+            className="rounded-full"
           />
         </div>
         {!minimized ? (
-          <div className='flex min-w-60 flex-col overflow-hidden rounded-lg bg-white text-sm shadow'>
+          <div className="flex min-w-60 flex-col overflow-hidden rounded-lg bg-white text-sm shadow">
             <Thread
               thread={thread}
               indentCommentContent={false}
@@ -74,8 +70,9 @@ export const ad = ({ thread, onFocus, ...props }: Props) => {
         ) : null}
       </div>
     ),
-    [thread.comments.length, minimized,onFocus, props, thread]
+    [minimized, onFocus, thread] // Removed unnecessary props
   );
 
   return <>{memoizedContent}</>;
 };
+
