@@ -1,20 +1,24 @@
 import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URI;
-if (!uri) throw new Error("⚠️ MONGODB_URI is missing in .env.local!");
-
-let client;
-let clientPromise: Promise<MongoClient>;
-
-if (process.env.NODE_ENV === "development") {
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri);
-    global._mongoClientPromise = client.connect();
-  }
-  clientPromise = global._mongoClientPromise;
-} else {
-  client = new MongoClient(uri);
-  clientPromise = client.connect();
+const uri = process.env.MONGODB_URI; // Make sure this is set
+if (!uri) {
+  throw new Error("⚠️ MONGODB_URI is not defined in .env");
 }
 
-export default clientPromise;
+let client;
+let db;
+
+async function connectDB() {
+  if (!client) {
+    client = new MongoClient(uri, {
+      serverSelectionTimeoutMS: 10000, // Increases timeout
+    });
+    await client.connect();
+    console.log("✅ Connected to MongoDB");
+  }
+  db = client.db(); // Select the default database
+  return db;
+}
+
+export default connectDB;
+
