@@ -71,11 +71,9 @@ const SignIn = ({ setIsLoggedIn, toggleAuthMode }: { setIsLoggedIn: React.Dispat
           {message && <p style={styles.message}>{message}</p>}
 
           <p style={styles.toggleText}>
-            Don't have an account?{" "}
-            <button
-              onClick={toggleAuthMode}
-              style={styles.toggleButton}
-            >
+  {`Don't have an account? `}
+  <button onClick={toggleAuthMode} style={styles.toggleButton}>
+ 
               Sign Up
             </button>
           </p>
