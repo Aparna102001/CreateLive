@@ -6,7 +6,7 @@ import { ThreadData } from "@liveblocks/client";
 import { ThreadMetadata, useEditThreadMetadata, useThreads, useUser } from "@/liveblocks.config";
 import { useMaxZIndex } from "@/lib/useMaxZIndex";
 
-import { PinnedThread } from "./PinnedThread";
+import PinnedThread from "./PinnedThread";
 
 type OverlayThreadProps = {
   thread: ThreadData<ThreadMetadata>;
@@ -14,15 +14,9 @@ type OverlayThreadProps = {
 };
 
 export const CommentsOverlay = () => {
-  /**
-   * We're using the useThreads hook to get the list of threads
-   * in the room.
-   *
-   * useThreads: https://liveblocks.io/docs/api-reference/liveblocks-react#useThreads
-   */
   const { threads } = useThreads();
 
-  // get the max z-index of a thread
+  // Get the max z-index of a thread
   const maxZIndex = useMaxZIndex();
 
   return (
@@ -37,31 +31,14 @@ export const CommentsOverlay = () => {
 };
 
 const OverlayThread = ({ thread, maxZIndex }: OverlayThreadProps) => {
-  /**
-   * We're using the useEditThreadMetadata hook to edit the metadata
-   * of a thread.
-   *
-   * useEditThreadMetadata: https://liveblocks.io/docs/api-reference/liveblocks-react#useEditThreadMetadata
-   */
   const editThreadMetadata = useEditThreadMetadata();
+  const { isLoading } = useUser(thread.comments[0]?.userId); // Ensure thread has comments before accessing
 
-  /**
-   * We're using the useUser hook to get the user of the thread.
-   *
-   * useUser: https://liveblocks.io/docs/api-reference/liveblocks-react#useUser
-   */
-  const { isLoading } = useUser(thread.comments[0].userId);
-
-  // We're using a ref to get the thread element to position it
   const threadRef = useRef<HTMLDivElement>(null);
 
-  // If other thread(s) above, increase z-index on last element updated
   const handleIncreaseZIndex = useCallback(() => {
-    if (maxZIndex === thread.metadata.zIndex) {
-      return;
-    }
+    if (maxZIndex === thread.metadata.zIndex) return;
 
-    // Update the z-index of the thread in the room
     editThreadMetadata({
       threadId: thread.id,
       metadata: {
@@ -70,7 +47,7 @@ const OverlayThread = ({ thread, maxZIndex }: OverlayThreadProps) => {
     });
   }, [thread, editThreadMetadata, maxZIndex]);
 
-  if (isLoading) {
+  if (isLoading || !thread.comments.length) {
     return null;
   }
 
@@ -81,10 +58,14 @@ const OverlayThread = ({ thread, maxZIndex }: OverlayThreadProps) => {
       className="absolute left-0 top-0 flex gap-5"
       style={{
         transform: `translate(${thread.metadata.x}px, ${thread.metadata.y}px)`,
+        zIndex: thread.metadata.zIndex ?? 1, // Ensure zIndex is always defined
       }}
     >
-      {/* render the thread */}
-      <PinnedThread thread={thread} onFocus={handleIncreaseZIndex} />
+      {/* Ensure PinnedThread is a valid component */}
+      {PinnedThread ? <PinnedThread thread={thread} onFocus={handleIncreaseZIndex} /> : null}
     </div>
   );
 };
+
+// Ensure PinnedThread is properly exported from its file
+export default OverlayThread;

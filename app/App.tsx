@@ -23,8 +23,8 @@ import { LeftSidebar, Live, Navbar, RightSidebar } from "@/components/index";
 import { handleImageUpload } from "@/lib/shapes";
 import { defaultNavElement } from "@/constants";
 import { ActiveElement, Attributes } from "@/types/type";
-import SignIn from "@/pages/signin";
-import SignUp from "@/pages/signup";
+import SignIn from "@/components/signin";
+import SignUp from "@/components/signup";
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSignUpMode, setIsSignUpMode] = useState(false);
