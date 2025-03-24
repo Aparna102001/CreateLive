@@ -5,12 +5,13 @@ type PinnedThreadProps = {
   onFocus: (threadId: string) => void;
 };
 
-const PinnedThread = ({ thread, onFocus }: PinnedThreadProps) => {
+export const PinnedThread = ({ thread, onFocus }: PinnedThreadProps) => {
   return (
     <div>
-      <p>Thread ID: {thread.id}</p>
+      <p>{thread.metadata?.title}</p> 
     </div>
   );
 };
+
 
 export default PinnedThread;

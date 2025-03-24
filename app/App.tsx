@@ -169,6 +169,15 @@ export default function Home() {
     });
 
     fabricRef.current.on("mouse:move", (options) => {
+      const handleCanvasMouseMove = ({ options, canvas, isDrawing }: any) => {
+        if (!canvas || !isDrawing) return;
+      
+        const pointer = canvas.getPointer(options.e);
+        console.log("Mouse moved to:", pointer.x, pointer.y);
+        
+        // Add any custom logic for mouse movement handling
+      };
+      
       handleCanvasMouseMove({
         options,
         canvas: fabricRef.current,
