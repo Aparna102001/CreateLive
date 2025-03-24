@@ -32,12 +32,12 @@ const SignIn = ({ setIsLoggedIn, toggleAuthMode }: { setIsLoggedIn: React.Dispat
 
   return (
     <div style={styles.container}>
-      {/* Navbar */}
-      <nav style={styles.navbar}>
-        <div style={styles.navContent}>
-          <img src="/assets/logo.svg" alt="CreativeLive Logo" style={styles.logo} />
-          
-        </div>
+          {/* Navbar */}
+          <nav style={styles.navbar}>
+            <div style={styles.navContent}>
+              <Image src="/assets/logo.svg" alt="createlive Logo" width={100} height={50} />
+              
+            </div>
       </nav>
 
       <div style={styles.formWrapper}>
